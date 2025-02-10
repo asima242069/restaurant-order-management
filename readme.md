@@ -1,76 +1,77 @@
 # Restaurant Order Management System
 
-## Описание
-Система управления заказами в ресторане позволяет пользователям зарегистрироваться, войти в систему, просматривать доступные блюда, делать заказы и отслеживать статистику. Администраторы могут управлять блюдами и просматривать статистику по заказам. Все заказы и транзакции записываются в базу данных.
+## Description
+The Restaurant Order Management System allows users to register, log in, view available dishes, place orders, and track statistics. Administrators can manage dishes and view order statistics. All orders and transactions are recorded in the database.
 
-## Функции
+## Features
 
-- **Регистрация и авторизация**:
-  - Возможность зарегистрироваться в системе как пользователь или администратор.
-  - Возможность войти в систему для выполнения дальнейших действий.
+- **Registration and Authentication**:
+  - Ability to register as a user or an administrator.
+  - Ability to log in for further actions.
 
-- **Меню пользователя**:
-  - Просмотр доступных блюд.
-  - Возможность сделать заказ с выбором блюда и количества.
+- **User Menu**:
+  - View available dishes.
+  - Ability to place an order by selecting a dish and specifying the quantity.
 
-- **Меню администратора**:
-  - Просмотр всех блюд.
-  - Добавление, удаление и обновление блюд.
-  - Просмотр статистики по заказам и транзакциям.
+- **Admin Menu**:
+  - View all dishes.
+  - Add, remove, and update dishes.
+  - View order and transaction statistics.
 
-- **Статистика**:
-  - Просмотр общего количества заказов.
-  - Просмотр количества доступных блюд.
-  - Просмотр заказанных блюд по их количеству.
-  - Просмотр статистики по клиентам.
+- **Statistics**:
+  - View the total number of orders.
+  - View the number of available dishes.
+  - View the number of ordered dishes by quantity.
+  - View customer statistics.
 
-## Структура базы данных
+## Database Structure
 
-### Таблица `users`:
-- `user_id` (INT): Уникальный идентификатор пользователя.
-- `name` (VARCHAR): Имя пользователя.
-- `email` (VARCHAR): Электронная почта пользователя.
-- `role` (VARCHAR): Роль пользователя (Admin/Customer).
+### `users` Table:
+- `user_id` (INT): Unique identifier for the user.
+- `name` (VARCHAR): User's name.
+- `email` (VARCHAR): User's email address.
+- `role` (VARCHAR): User's role (Admin/Customer).
 
-### Таблица `dishes`:
-- `dish_id` (INT): Уникальный идентификатор блюда.
-- `name` (VARCHAR): Название блюда.
-- `category` (VARCHAR): Категория блюда (например, "Italian", "Chinese").
-- `price` (DECIMAL): Цена блюда.
-- `available` (BOOLEAN): Доступность блюда для заказа.
+### `dishes` Table:
+- `dish_id` (INT): Unique identifier for the dish.
+- `name` (VARCHAR): Dish name.
+- `category` (VARCHAR): Dish category (e.g., "Italian", "Chinese").
+- `price` (DECIMAL): Dish price.
+- `available` (BOOLEAN): Availability of the dish for ordering.
 
-### Таблица `orders`:
-- `order_id` (INT): Уникальный идентификатор заказа.
-- `user_id` (INT): Идентификатор пользователя, который сделал заказ.
-- `dish_id` (INT): Идентификатор блюда, которое заказано.
-- `quantity` (INT): Количество заказанных блюд.
+### `orders` Table:
+- `order_id` (INT): Unique identifier for the order.
+- `user_id` (INT): Identifier of the user who placed the order.
+- `dish_id` (INT): Identifier of the dish ordered.
+- `quantity` (INT): Quantity of the ordered dish.
 
-### Таблица `transactions`:
-- `transaction_id` (INT): Уникальный идентификатор транзакции.
-- `user_id` (INT): Идентификатор пользователя, который совершил транзакцию.
-- `total_amount` (DECIMAL): Общая сумма транзакции.
-- `quantity` (INT): Количество купленных блюд.
-- `transaction_date` (TIMESTAMP): Дата и время транзакции.
+### `transactions` Table:
+- `transaction_id` (INT): Unique identifier for the transaction.
+- `user_id` (INT): Identifier of the user who made the transaction.
+- `total_amount` (DECIMAL): Total amount of the transaction.
+- `quantity` (INT): Quantity of dishes purchased.
+- `transaction_date` (TIMESTAMP): Date and time of the transaction.
 
-## Требования
+## Requirements
 
-Для запуска проекта на вашем компьютере должны быть установлены:
+To run the project on your computer, the following must be installed:
 
-- Java 8 или выше.
-- PostgreSQL (или другая база данных, поддерживающая SQL).
-- JDBC-драйвер для PostgreSQL (или другой, если используете другую СУБД).
+- Java 8 or higher.
+- PostgreSQL.
+- JDBC driver for PostgreSQL.
 
-## Установка и запуск
+## Installation and Setup
 
-1. Склонируйте репозиторий:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/your-username/restaurant-order-management.git
    cd restaurant-order-management
-Убедитесь, что у вас установлен PostgreSQL и создана база данных с нужной структурой. Если база данных еще не создана, выполните запросы для создания таблиц:
+   ```
 
-sql
-Copy
+Make sure PostgreSQL is installed and the database with the required structure is created. If the database hasn’t been created yet, run the following SQL queries to create the tables:
+
+```sql
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     name VARCHAR(100),
@@ -103,35 +104,31 @@ CREATE TABLE transactions (
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-Внесите данные в таблицы users и dishes (для тестирования). Пример данных для таблицы dishes:
+```
 
-sql
-Copy
+Add sample data to the `users` and `dishes` tables (for testing). Example data for the `dishes` table:
+
+```sql
 INSERT INTO dishes (name, category, price, available) VALUES
 ('Pasta Carbonara', 'Italian', 33.43, FALSE),
 ('Pizza Margherita', 'Italian', 20.71, TRUE),
 ('Caesar Salad', 'Salad', 43.16, FALSE),
 ('Chicken Curry', 'Indian', 9.44, FALSE),
 ('Vegetable Stir Fry', 'Chinese', 37.78, TRUE);
-Скомпилируйте и запустите проект:
+```
 
-Для компиляции и запуска проекта используйте следующую команду:
+Compile and run the project.
 
-bash
-Copy
-javac MainApp.java
-java MainApp
-Следуйте инструкциям в консоли для входа в систему, регистрации и работы с меню.
+## Example Usage
+- Log in as a user or an administrator.
+  - For users:
+    - View available dishes.
+    - Place an order by selecting a dish and specifying the quantity.
+  - For administrators:
+    - View statistics on orders and dishes.
+    - Add, update, or delete dishes.
 
-Пример использования
-Войдите в систему как пользователь или администратор.
-Для пользователя:
-Просмотрите доступные блюда.
-Сделайте заказ, выбрав блюдо и указав количество.
-Для администратора:
-Просмотрите статистику по заказам и блюдам.
-Добавьте, обновите или удалите блюда.
-Важные замечания
-Вход в систему осуществляется по ID пользователя.
-Администратор должен ввести пароль для доступа к меню администратора.
-При размещении заказа происходит запись в таблицу orders, а также транзакция фиксируется в таблице transactions.
+## Important Notes
+- Login is done by user ID.
+- The administrator must enter a password to access the admin menu.
+- When placing an order, an entry is made in the `orders` table, and a transaction is recorded in the `transactions` table.
