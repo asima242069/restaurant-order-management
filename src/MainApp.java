@@ -130,8 +130,9 @@ public class MainApp {
             System.out.println("2. Add a new dish");
             System.out.println("3. Delete a dish");
             System.out.println("4. Update dish details");
-            System.out.println("5. View statistics");
-            System.out.println("6. Back to main menu");
+            System.out.println("5. Search dish by ID");
+            System.out.println("6. View statistics");
+            System.out.println("7. Back to main menu");
             System.out.print("Enter your choice: ");
             int choice = Integer.parseInt(scanner.nextLine().trim());
 
@@ -149,9 +150,12 @@ public class MainApp {
                     updateDishDetails();
                     break;
                 case 5:
-                    viewStatistics();
+                    searchDishById();  // Новый пункт для поиска блюда
                     break;
                 case 6:
+                    viewStatistics();
+                    break;
+                case 7:
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -164,7 +168,8 @@ public class MainApp {
             System.out.println("\n=== Customer Menu ===");
             System.out.println("1. View all dishes");
             System.out.println("2. Place an order");
-            System.out.println("3. Back to main menu");
+            System.out.println("3. Search dish by ID");
+            System.out.println("4. Back to main menu");
             System.out.print("Enter your choice: ");
             int choice = Integer.parseInt(scanner.nextLine().trim());
 
@@ -176,10 +181,38 @@ public class MainApp {
                     placeOrder(customer);
                     break;
                 case 3:
+                    searchDishById();  // Новый пункт для поиска блюда
+                    break;
+                case 4:
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
+        }
+    }
+
+    private static void searchDishById() {
+        System.out.print("Enter the dish ID to search: ");
+        int dishId = Integer.parseInt(scanner.nextLine().trim());
+
+        String query = "SELECT * FROM dishes WHERE dish_id = ?";
+        try (Connection connection = databaseHandler.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, dishId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                System.out.printf("Dish ID: %d, Name: %s, Price: %.2f, Category: %s, Available: %b%n",
+                        resultSet.getInt("dish_id"),
+                        resultSet.getString("name"),
+                        resultSet.getDouble("price"),
+                        resultSet.getString("category"),
+                        resultSet.getBoolean("available"));
+            } else {
+                System.out.println("Dish not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
